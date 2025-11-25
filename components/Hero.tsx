@@ -3,10 +3,25 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Monitor, Database } from 'lucide-react';
 import { useData } from './DataContext';
+import { Page } from '../App';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onNavigate?: (page: Page, sectionId?: string) => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   const { data } = useData();
   const { hero } = data.home;
+
+  const handlePrimaryClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onNavigate) onNavigate('contact');
+  };
+
+  const handleSecondaryClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onNavigate) onNavigate('services');
+  };
 
   return (
     <section id="hero" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-6 overflow-hidden">
@@ -33,19 +48,19 @@ const Hero: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <motion.a 
-              href="#contact"
+            <button
+              onClick={handlePrimaryClick}
               className="group flex items-center justify-center gap-2 bg-gradient-to-l from-primary to-accent text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-1 transition-all duration-300 w-full sm:w-[180px]"
             >
               {hero.ctaPrimary}
               <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            </motion.a>
-            <motion.a 
-              href="#services"
+            </button>
+            <button
+              onClick={handleSecondaryClick}
               className="flex items-center justify-center gap-2 bg-white border-2 border-gray-200 text-text px-8 py-4 rounded-xl font-bold hover:border-primary hover:text-primary transition-all duration-300 w-full sm:w-[160px]"
             >
               {hero.ctaSecondary}
-            </motion.a>
+            </button>
           </div>
         </motion.div>
 

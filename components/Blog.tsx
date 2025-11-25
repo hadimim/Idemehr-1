@@ -6,9 +6,15 @@ import { useData } from './DataContext';
 
 interface BlogProps {
   onNavigate?: (page: Page, sectionId?: string) => void;
+  title?: string;
+  subtitle?: string;
 }
 
-const Blog: React.FC<BlogProps> = ({ onNavigate }) => {
+const Blog: React.FC<BlogProps> = ({ 
+  onNavigate,
+  title = "وبلاگ",
+  subtitle = "آخرین مقالات آموزشی"
+}) => {
   const { data } = useData();
   // Show latest 3 PUBLISHED articles, prioritize featured ones
   const articles = data.blog
@@ -29,8 +35,8 @@ const Blog: React.FC<BlogProps> = ({ onNavigate }) => {
     <section id="blog" className="py-20 px-6 bg-secondary">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-primary font-bold text-lg mb-2">وبلاگ</h2>
-          <h3 className="text-3xl font-bold text-text">آخرین مقالات آموزشی</h3>
+          <h2 className="text-primary font-bold text-lg mb-2">{title}</h2>
+          <h3 className="text-3xl font-bold text-text">{subtitle}</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

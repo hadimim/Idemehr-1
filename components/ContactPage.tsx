@@ -14,6 +14,8 @@ interface Errors {
 
 const ContactPage: React.FC = () => {
   const { data, updateMessages } = useData();
+  const header = data.pageHeaders.contact;
+  const settings = data.settings;
   const [formState, setFormState] = useState({
     name: '',
     org: '',
@@ -112,7 +114,7 @@ const ContactPage: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-5xl font-bold text-text mb-6"
           >
-            ارتباط با <span className="text-primary">ایده‌پرداز مهر</span>
+            {header.title}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
@@ -120,7 +122,7 @@ const ContactPage: React.FC = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-xl text-gray-500 max-w-2xl mx-auto"
           >
-            ما همیشه مشتاق شنیدن صدای شما هستیم. برای مشاوره رایگان، درخواست دمو یا شروع پروژه جدید با ما تماس بگیرید.
+            {header.subtitle}
           </motion.p>
         </div>
       </section>
@@ -138,8 +140,11 @@ const ContactPage: React.FC = () => {
             {/* Map Card */}
             <div className="bg-white rounded-3xl p-2 shadow-xl border border-gray-100 overflow-hidden group relative">
                <div className="relative h-64 w-full rounded-2xl overflow-hidden bg-gray-100">
-                 {/* Simulated Map */}
-                 <div className="absolute inset-0 bg-[url('https://picsum.photos/seed/map/600/400')] bg-cover bg-center opacity-80 grayscale hover:grayscale-0 transition-all duration-700 scale-100 hover:scale-110"></div>
+                 {/* Simulated Map or Image */}
+                 <div 
+                  className="absolute inset-0 bg-cover bg-center opacity-80 grayscale hover:grayscale-0 transition-all duration-700 scale-100 hover:scale-110"
+                  style={{ backgroundImage: `url('${settings.contact.mapUrl || 'https://picsum.photos/seed/map/600/400'}')` }}
+                 ></div>
                  <div className="absolute inset-0 bg-primary/10"></div>
                  
                  {/* Pin Animation */}
@@ -157,7 +162,7 @@ const ContactPage: React.FC = () => {
                    دفتر مرکزی
                  </h3>
                  <p className="text-gray-600 leading-relaxed">
-                   تهران، خیابان ولیعصر، بالاتر از پارک ساعی، کوچه ۳۴، پلاک ۱۲، برج نگین، طبقه ۴
+                   {settings.contact.address}
                  </p>
                </div>
             </div>
@@ -167,12 +172,12 @@ const ContactPage: React.FC = () => {
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                 <Phone className="w-8 h-8 text-blue-500 mb-4 bg-blue-50 p-1.5 rounded-lg" />
                 <p className="text-sm text-gray-500 mb-1">تلفن تماس</p>
-                <a href="tel:+982188996633" className="font-bold text-lg dir-ltr block text-right hover:text-primary transition-colors">۰۲۱ - ۸۸ ۹۹ ۶۶ ۳۳</a>
+                <a href={`tel:${settings.contact.phone}`} className="font-bold text-lg dir-ltr block text-right hover:text-primary transition-colors">{settings.contact.phone}</a>
               </div>
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                 <Mail className="w-8 h-8 text-green-500 mb-4 bg-green-50 p-1.5 rounded-lg" />
                 <p className="text-sm text-gray-500 mb-1">پست الکترونیک</p>
-                <a href="mailto:info@idehpardaz.ir" className="font-bold text-lg hover:text-primary transition-colors">info@idehpardaz.ir</a>
+                <a href={`mailto:${settings.contact.email}`} className="font-bold text-lg hover:text-primary transition-colors">{settings.contact.email}</a>
               </div>
             </div>
           </motion.div>

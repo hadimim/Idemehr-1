@@ -1,8 +1,24 @@
+
 import React, { useState } from 'react';
 import { Send, Phone, Mail, MapPin, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useData } from './DataContext';
 
-const ContactForm: React.FC = () => {
+interface ContactFormProps {
+  sidebarTitle?: string;
+  sidebarDesc?: string;
+  formTitle?: string;
+  formDesc?: string;
+}
+
+const ContactForm: React.FC<ContactFormProps> = ({
+  sidebarTitle = "اطلاعات تماس",
+  sidebarDesc = "برای مشاوره رایگان و دریافت دمو محصولات، با ما در ارتباط باشید. تیم پشتیبانی ما آماده پاسخگویی به شماست.",
+  formTitle = "درخواست دمو",
+  formDesc = "فرم زیر را پر کنید، کارشناسان ما در کمتر از ۲۴ ساعت با شما تماس می‌گیرند."
+}) => {
+  const { data } = useData();
+  const settings = data.settings;
   const [formState, setFormState] = useState({
     name: '',
     org: '',
@@ -36,9 +52,9 @@ const ContactForm: React.FC = () => {
           {/* Contact Info Side (Left on Desktop, Top on Mobile) */}
           <div className="lg:col-span-2 bg-primary text-white p-10 flex flex-col justify-between relative overflow-hidden">
             <div className="relative z-10">
-              <h3 className="text-2xl font-bold mb-6">اطلاعات تماس</h3>
+              <h3 className="text-2xl font-bold mb-6">{sidebarTitle}</h3>
               <p className="text-blue-100 mb-10 leading-relaxed">
-                برای مشاوره رایگان و دریافت دمو محصولات، با ما در ارتباط باشید. تیم پشتیبانی ما آماده پاسخگویی به شماست.
+                {sidebarDesc}
               </p>
 
               <div className="space-y-6">
@@ -46,21 +62,21 @@ const ContactForm: React.FC = () => {
                   <Phone className="w-6 h-6 text-blue-300 mt-1" />
                   <div>
                     <p className="text-xs text-blue-200">شماره تماس</p>
-                    <p className="font-bold dir-ltr text-right">۰۲۱ - ۸۸ ۹۹ ۶۶ ۳۳</p>
+                    <p className="font-bold dir-ltr text-right">{settings.contact.phone}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Mail className="w-6 h-6 text-blue-300 mt-1" />
                   <div>
                     <p className="text-xs text-blue-200">ایمیل سازمانی</p>
-                    <p className="font-bold">info@idehpardaz.ir</p>
+                    <p className="font-bold">{settings.contact.email}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <MapPin className="w-6 h-6 text-blue-300 mt-1" />
                   <div>
                     <p className="text-xs text-blue-200">آدرس</p>
-                    <p className="font-bold">تهران، خیابان ولیعصر، پارک ساعی، برج نگین</p>
+                    <p className="font-bold">{settings.contact.address}</p>
                   </div>
                 </div>
               </div>
@@ -74,8 +90,8 @@ const ContactForm: React.FC = () => {
           {/* Form Side */}
           <div className="lg:col-span-3 p-10 bg-white">
              <div className="mb-8">
-               <h3 className="text-2xl font-bold text-text mb-2">درخواست دمو</h3>
-               <p className="text-gray-500 text-sm">فرم زیر را پر کنید، کارشناسان ما در کمتر از ۲۴ ساعت با شما تماس می‌گیرند.</p>
+               <h3 className="text-2xl font-bold text-text mb-2">{formTitle}</h3>
+               <p className="text-gray-500 text-sm">{formDesc}</p>
              </div>
 
              {isSubmitted ? (

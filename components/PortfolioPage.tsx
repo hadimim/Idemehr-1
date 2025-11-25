@@ -34,6 +34,7 @@ const Counter = ({ value, suffix }: { value: number; suffix: string }) => {
 const PortfolioPage: React.FC<PortfolioPageProps> = ({ onCtaClick }) => {
   const { data } = useData();
   const projects = data.projects;
+  const header = data.pageHeaders.portfolio;
   const [activeFilter, setActiveFilter] = useState<Category>('All');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
@@ -184,7 +185,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({ onCtaClick }) => {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-bold text-text mb-6"
           >
-            نمونه کارهای <span className="text-primary">ایده‌پرداز مهر</span>
+            {header.title}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
@@ -192,7 +193,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({ onCtaClick }) => {
             transition={{ delay: 0.2 }}
             className="text-xl text-gray-500 max-w-2xl mx-auto mb-10"
           >
-            بررسی عمیق پروژه‌هایی که با نوآوری و تخصص پیاده‌سازی کرده‌ایم.
+            {header.subtitle}
           </motion.p>
 
           {/* Filters */}

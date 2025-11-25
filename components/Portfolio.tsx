@@ -7,9 +7,15 @@ import { useData } from './DataContext';
 
 interface PortfolioProps {
   onNavigate?: (page: Page, sectionId?: string) => void;
+  title?: string;
+  subtitle?: string;
 }
 
-const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
+const Portfolio: React.FC<PortfolioProps> = ({ 
+  onNavigate,
+  title = "نمونه کارها",
+  subtitle = "پروژه‌های منتخب"
+}) => {
   const { data } = useData();
   // Only show featured projects on Home
   const featuredProjects = data.projects.filter(p => p.featured);
@@ -26,8 +32,8 @@ const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
       <div className="container mx-auto">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <h2 className="text-primary font-bold text-lg mb-2">نمونه کارها</h2>
-            <h3 className="text-3xl font-bold text-text">پروژه‌های منتخب</h3>
+            <h2 className="text-primary font-bold text-lg mb-2">{title}</h2>
+            <h3 className="text-3xl font-bold text-text">{subtitle}</h3>
           </div>
           <button onClick={handleViewAll} className="hidden md:flex items-center gap-2 text-gray-500 hover:text-primary transition-colors">
             مشاهده همه

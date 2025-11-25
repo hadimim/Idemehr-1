@@ -77,16 +77,18 @@ const DynamicPageRenderer: React.FC<{ page: string, onNavigate: any }> = ({ page
     <>
       {layout.map((section) => {
         let Component = null;
+        const props = section.props || {};
+
         switch (section.component) {
-          case 'Hero': Component = <Hero />; break;
-          case 'Services': Component = <Services />; break;
-          case 'Process': Component = <Process />; break;
-          case 'Portfolio': Component = <Portfolio onNavigate={onNavigate} />; break;
-          case 'Testimonials': Component = <Testimonials />; break;
-          case 'Blog': Component = <Blog onNavigate={onNavigate} />; break;
-          case 'ContactForm': Component = <ContactForm />; break;
+          case 'Hero': Component = <Hero onNavigate={onNavigate} />; break;
+          case 'Services': Component = <Services {...props} />; break;
+          case 'Process': Component = <Process onNavigate={onNavigate} {...props} />; break;
+          case 'Portfolio': Component = <Portfolio onNavigate={onNavigate} {...props} />; break;
+          case 'Testimonials': Component = <Testimonials {...props} />; break;
+          case 'Blog': Component = <Blog onNavigate={onNavigate} {...props} />; break;
+          case 'ContactForm': Component = <ContactForm {...props} />; break;
           case 'AboutHero': Component = <AboutPage onCtaClick={() => onNavigate('contact')} />; break;
-          case 'ContentBlock': Component = <ContentBlock content={section.props?.content || ''} />; break;
+          case 'ContentBlock': Component = <ContentBlock content={props.content || ''} />; break;
           case 'ServicesHero': Component = <ServicesPage onCtaClick={() => onNavigate('contact')} />; break;
           case 'SolutionsHero': Component = <SolutionsPage onCtaClick={() => onNavigate('contact')} />; break;
           case 'PortfolioHero': Component = <PortfolioPage onCtaClick={() => onNavigate('contact')} />; break;

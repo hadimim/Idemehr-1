@@ -4,7 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Quote } from 'lucide-react';
 import { useData } from './DataContext';
 
-const Testimonials: React.FC = () => {
+interface TestimonialsProps {
+  title?: string;
+  subtitle?: string;
+}
+
+const Testimonials: React.FC<TestimonialsProps> = ({
+  title = "نظرات مشتریان ما",
+  subtitle = "آنچه دیگران درباره تجربه همکاری با ما می‌گویند"
+}) => {
   const { data } = useData();
   const [currentIndex, setCurrentIndex] = useState(0);
   const testimonials = data.testimonials;
@@ -30,8 +38,8 @@ const Testimonials: React.FC = () => {
       <div className="container mx-auto relative z-10 max-w-4xl text-center">
         <div className="mb-12">
           <Quote className="w-12 h-12 mx-auto text-blue-300 mb-6 opacity-50" />
-          <h2 className="text-3xl font-bold mb-2">نظرات مشتریان ما</h2>
-          <p className="text-blue-100">آنچه دیگران درباره تجربه همکاری با ما می‌گویند</p>
+          <h2 className="text-3xl font-bold mb-2">{title}</h2>
+          <p className="text-blue-100">{subtitle}</p>
         </div>
 
         <div className="relative min-h-[280px] sm:min-h-[240px]">

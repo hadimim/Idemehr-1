@@ -10,6 +10,7 @@ interface BlogPageProps {
 
 const BlogPage: React.FC<BlogPageProps> = ({ onCtaClick }) => {
   const { data } = useData();
+  const header = data.pageHeaders.blog;
   // Filter for published articles only
   const articles = data.blog.filter(a => a.status === 'published');
   const categories = ["همه", ...data.blogCategories];
@@ -196,7 +197,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ onCtaClick }) => {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-bold text-text mb-6"
           >
-            وبلاگ <span className="text-primary">تخصصی</span>
+            {header.title}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
@@ -204,7 +205,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ onCtaClick }) => {
             transition={{ delay: 0.2 }}
             className="text-xl text-gray-500 max-w-2xl mx-auto mb-10"
           >
-            آخرین اخبار تکنولوژی، مقالات آموزشی و تحلیل‌های تخصصی دنیای نرم‌افزار را اینجا بخوانید.
+            {header.subtitle}
           </motion.p>
 
           {/* Search & Filter Bar */}

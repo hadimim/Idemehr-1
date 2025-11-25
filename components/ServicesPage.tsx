@@ -11,6 +11,7 @@ interface ServicesPageProps {
 const ServicesPage: React.FC<ServicesPageProps> = ({ onCtaClick }) => {
   const { data } = useData();
   const serviceDetails = data.servicesPage;
+  const header = data.pageHeaders.services;
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const toggleExpand = (id: string) => {
@@ -38,7 +39,7 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ onCtaClick }) => {
               transition={{ duration: 0.6 }}
               className="text-4xl md:text-5xl font-bold text-text mb-6"
             >
-              خدمات و راهکارهای <span className="text-primary">دیجیتال</span>
+              {header.title}
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0 }}
@@ -46,17 +47,19 @@ const ServicesPage: React.FC<ServicesPageProps> = ({ onCtaClick }) => {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="text-xl text-gray-500 max-w-2xl mx-auto mb-12 leading-relaxed"
             >
-              از ایده تا اجرا، ما تمام ابزارهای لازم برای موفقیت دیجیتال کسب‌وکار شما را فراهم می‌کنیم.
+              {header.subtitle}
             </motion.p>
             
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
-              className="max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-100 bg-white"
-            >
-               <img src="https://picsum.photos/seed/services-hero/1200/400" alt="Services Banner" className="w-full h-[200px] md:h-[300px] object-cover opacity-90" />
-            </motion.div>
+            {header.image && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4 }}
+                className="max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-100 bg-white"
+              >
+                 <img src={header.image} alt="Services Banner" className="w-full h-[200px] md:h-[300px] object-cover opacity-90" />
+              </motion.div>
+            )}
          </div>
       </section>
 

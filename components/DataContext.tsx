@@ -191,6 +191,12 @@ export interface HeaderLink {
   sectionId?: string;
 }
 
+export interface HeroData {
+  title: string;
+  subtitle: string;
+  image?: string;
+}
+
 export interface GlobalSettings {
   general: {
     title: string;
@@ -260,6 +266,13 @@ export interface SiteData {
     values: ValueItem[];
     cta: { title: string; desc: string; buttonText: string; };
   };
+  // Dynamic Headers for other pages
+  pageHeaders: {
+    services: HeroData;
+    portfolio: HeroData;
+    blog: HeroData;
+    contact: HeroData;
+  };
   servicesPage: ServiceDetail[];
   solutions: {
     hero: { title: string; subtitle: string; image: string; };
@@ -305,7 +318,7 @@ const initialData: SiteData = {
       phone: '۰۲۱ - ۸۸ ۹۹ ۶۶ ۳۳',
       email: 'info@idehpardaz.ir',
       address: 'تهران، خیابان ولیعصر، پارک ساعی، برج نگین',
-      mapUrl: '',
+      mapUrl: 'https://picsum.photos/seed/map/600/400',
     },
     socials: {
       linkedin: '#',
@@ -392,6 +405,25 @@ const initialData: SiteData = {
       title: 'آماده همکاری با ما هستید؟',
       desc: 'پروژه خود را به تیم متخصص ما بسپارید و از نتیجه شگفت‌زده شوید. مشاوره اولیه کاملاً رایگان است.',
       buttonText: 'شروع همکاری'
+    }
+  },
+  pageHeaders: {
+    services: {
+      title: 'خدمات و راهکارهای دیجیتال',
+      subtitle: 'از ایده تا اجرا، ما تمام ابزارهای لازم برای موفقیت دیجیتال کسب‌وکار شما را فراهم می‌کنیم.',
+      image: 'https://picsum.photos/seed/services-hero/1200/400'
+    },
+    portfolio: {
+      title: 'نمونه کارهای ایده‌پرداز مهر',
+      subtitle: 'بررسی عمیق پروژه‌هایی که با نوآوری و تخصص پیاده‌سازی کرده‌ایم.'
+    },
+    blog: {
+      title: 'وبلاگ تخصصی',
+      subtitle: 'آخرین اخبار تکنولوژی، مقالات آموزشی و تحلیل‌های تخصصی دنیای نرم‌افزار را اینجا بخوانید.'
+    },
+    contact: {
+      title: 'ارتباط با ایده‌پرداز مهر',
+      subtitle: 'ما همیشه مشتاق شنیدن صدای شما هستیم. برای مشاوره رایگان، درخواست دمو یا شروع پروژه جدید با ما تماس بگیرید.'
     }
   },
   servicesPage: [
@@ -763,6 +795,7 @@ interface DataContextType {
   updateSettings: (newData: GlobalSettings) => void;
   updatePageLayout: (page: string, newLayout: PageSection[]) => void;
   updateMedia: (newData: MediaItem[]) => void;
+  updatePageHeaders: (newData: SiteData['pageHeaders']) => void;
   resetData: () => void;
 }
 
@@ -785,7 +818,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
            ...parsed,
            settings: { ...initialData.settings, ...(parsed.settings || {}) },
            pageLayouts: { ...initialData.pageLayouts, ...(parsed.pageLayouts || {}) },
-           media: parsed.media || initialData.media
+           media: parsed.media || initialData.media,
+           pageHeaders: { ...initialData.pageHeaders, ...(parsed.pageHeaders || {}) }
         };
         setData(mergedData);
       } catch (e) {
@@ -846,6 +880,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const updateSettings = (newData: GlobalSettings) => setData(prev => ({ ...prev, settings: newData }));
   const updatePageLayout = (page: string, newLayout: PageSection[]) => setData(prev => ({ ...prev, pageLayouts: { ...prev.pageLayouts, [page]: newLayout } }));
   const updateMedia = (newData: MediaItem[]) => setData(prev => ({ ...prev, media: newData }));
+  const updatePageHeaders = (newData: SiteData['pageHeaders']) => setData(prev => ({ ...prev, pageHeaders: newData }));
   
   const resetData = () => {
     setData(initialData);
@@ -876,6 +911,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       updateSettings,
       updatePageLayout,
       updateMedia,
+      updatePageHeaders,
       resetData 
     }}>
       {children}
