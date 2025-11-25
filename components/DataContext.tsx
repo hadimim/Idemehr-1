@@ -777,8 +777,6 @@ const initialData: SiteData = {
 interface DataContextType {
   data: SiteData;
   notification: Notification | null;
-  themeMode: 'light' | 'dark';
-  toggleTheme: () => void;
   notify: (type: NotificationType, message: string) => void;
   updateHome: (newData: SiteData['home']) => void;
   updateAbout: (newData: SiteData['about']) => void;
@@ -805,7 +803,6 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [data, setData] = useState<SiteData>(initialData);
   const [isLoaded, setIsLoaded] = useState(false);
   const [notification, setNotification] = useState<Notification | null>(null);
-  const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
 
   // Load from LocalStorage on mount
   useEffect(() => {
@@ -827,10 +824,9 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
     }
     
-    const savedTheme = localStorage.getItem('themeMode');
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setThemeMode('dark');
-    }
+    // Ensure light mode is forced
+    document.documentElement.classList.remove('dark');
+    localStorage.removeItem('themeMode');
 
     setIsLoaded(true);
   }, []);
@@ -841,21 +837,6 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       localStorage.setItem('siteData', JSON.stringify(data));
     }
   }, [data, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
-       localStorage.setItem('themeMode', themeMode);
-       if (themeMode === 'dark') {
-         document.documentElement.classList.add('dark');
-       } else {
-         document.documentElement.classList.remove('dark');
-       }
-    }
-  }, [themeMode, isLoaded]);
-
-  const toggleTheme = () => {
-    setThemeMode(prev => prev === 'light' ? 'dark' : 'light');
-  };
 
   const notify = (type: NotificationType, message: string) => {
     const id = Date.now().toString();
@@ -893,8 +874,6 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     <DataContext.Provider value={{ 
       data, 
       notification,
-      themeMode,
-      toggleTheme,
       notify,
       updateHome, 
       updateAbout, 

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, LogIn, Moon, Sun } from 'lucide-react';
+import { Menu, X, LogIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Page } from '../App';
 import { useData } from './DataContext';
@@ -11,7 +11,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
-  const { data, themeMode, toggleTheme } = useData();
+  const { data } = useData();
   const settings = data.settings;
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -95,14 +95,6 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <button
-             onClick={toggleTheme}
-             className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-             aria-label="Toggle Theme"
-          >
-             {themeMode === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-          </button>
-
           <button 
             onClick={handleLoginClick}
             className="hidden sm:flex items-center gap-2 text-primary font-bold text-sm border border-primary px-4 py-2 rounded-full hover:bg-primary hover:text-white transition-all duration-300"

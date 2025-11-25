@@ -11,7 +11,7 @@ import {
   Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Link as LinkIcon, Video, ListOrdered, List as ListIcon,
   MessageCircle, ShieldAlert, RefreshCcw, Search, ChevronLeft, Download, Send, Archive, UserPlus, Lock, RotateCcw, Activity,
   Palette, Monitor, AlertOctagon, Smartphone, Tablet, Monitor as DesktopIcon, ArrowUp, ArrowDown, Upload, Film, File, MoreVertical, Grid, Folder, MousePointerClick, Image,
-  ChevronDown, MapPin, Share2, Maximize, Scissors, Link, Lock as LockIcon, Unlock, Bell
+  ChevronDown, MapPin, Share2, Maximize, Scissors, Link, Lock as LockIcon, Unlock, Bell, Database
 } from 'lucide-react';
 import { useData, Project, Article, Message, User, PageSection, MediaItem, DynamicIcon, Service, ProcessStep, TeamMember, HistoryEvent, ValueItem } from './DataContext';
 
@@ -1207,11 +1207,77 @@ const MediaManager = () => {
 
 // --- Settings Manager ---
 const SettingsManager = () => {
-   const { data, updateSettings } = useData();
+   const { data, updateSettings, resetData, notify } = useData();
    const { settings } = data;
+   
+   const handleExport = () => {
+     const dataStr = JSON.stringify(data, null, 2);
+     const blob = new Blob([dataStr], { type: "application/json" });
+     const url = URL.createObjectURL(blob);
+     const link = document.createElement("a");
+     link.href = url;
+     link.download = `backup-${new Date().toISOString().split('T')[0]}.json`;
+     document.body.appendChild(link);
+     link.click();
+     document.body.removeChild(link);
+   };
+
+   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+         try {
+            const json = JSON.parse(event.target?.result as string);
+            // Basic validation
+            if (json.settings && json.home) {
+               if (confirm('آیا مطمئن هستید؟ تمام اطلاعات فعلی جایگزین خواهد شد.')) {
+                  localStorage.setItem('siteData', JSON.stringify(json));
+                  window.location.reload();
+               }
+            } else {
+               alert('فایل انتخاب شده نامعتبر است.');
+            }
+         } catch (err) {
+            alert('خطا در خواندن فایل.');
+         }
+      };
+      reader.readAsText(file);
+   };
 
    return (
       <div className="p-6 max-w-4xl mx-auto space-y-8">
+         {/* Data Management */}
+         <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700">
+            <h3 className="font-bold text-lg mb-6 flex items-center gap-2 dark:text-white">
+               <Database className="w-5 h-5 text-primary" />
+               مدیریت داده‌ها
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
+                  <h4 className="font-bold mb-2 dark:text-white">پشتیبان‌گیری (Backup)</h4>
+                  <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">دانلود تمام اطلاعات سایت شامل پروژه‌ها، مقالات و تنظیمات در قالب یک فایل JSON.</p>
+                  <button onClick={handleExport} className={BTN_PRIMARY}>
+                     <Download className="w-4 h-4" /> دانلود فایل پشتیبان
+                  </button>
+               </div>
+               <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl">
+                  <h4 className="font-bold mb-2 dark:text-white">بازیابی (Restore)</h4>
+                  <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">بازگردانی اطلاعات سایت از فایل پشتیبان. (اطلاعات فعلی حذف خواهد شد)</p>
+                  <label className={`${BTN_SECONDARY} cursor-pointer w-fit`}>
+                     <Upload className="w-4 h-4" /> انتخاب فایل
+                     <input type="file" accept=".json" onChange={handleImport} className="hidden" />
+                  </label>
+               </div>
+            </div>
+            <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+               <button onClick={() => { if(confirm('تمام اطلاعات به حالت اولیه برمی‌گردد. ادامه می‌دهید؟')) { resetData(); window.location.reload(); }}} className="text-red-500 text-sm font-bold hover:underline flex items-center gap-1">
+                  <RotateCcw className="w-4 h-4" /> بازنشانی به تنظیمات کارخانه
+               </button>
+            </div>
+         </div>
+
          {/* General Identity */}
          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700">
             <h3 className="font-bold text-lg mb-6 flex items-center gap-2 dark:text-white">
